@@ -18,6 +18,7 @@ class FarmerDetail(FarmerBase):
         orm_mode = True
         schema_extra = {
             "example": {
+                "username": "9999999999",
                 "farmer_name": "Rajesh",
                 "state_name": "Haryana",
                 "district_name": "Rohtak",
@@ -54,6 +55,13 @@ class FarmerSignUp(FarmerDetail):
         }
     }
 
+class Status(BaseModel):
+    status: str
+    message_details: str
+
 class Token(BaseModel):
     access_token: str
     access_token_type: str
+
+class TokenData(BaseModel):
+    username: str | None = None

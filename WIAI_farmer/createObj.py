@@ -25,5 +25,23 @@ def get_farmer(db: Session, username: str):
 def get_farmers(db: Session, skip: int = 0, limit: int = 5):
     return db.query(models.Farmer).offset(skip).limit(limit).all()
 
+def create_farmer_csv(db: Session, farmer: schemas.FarmerDetail):
+    db_farmer = models.Farmer(
+        username=farmer.username,
+        phone_number=farmer.username,
+        password=auth.get_password_hash(farmer.username),
+        farmer_name=farmer.farmer_name,
+        state_name=farmer.state_name,
+        district_name=farmer.district_name,
+        village_name=farmer.village_name,
+    )
 
+    each_farmer = get_farmer(db, db_farmer.username)
 
+    if not each_farmer:
+        db.add(db_farmer)
+        db.commit()
+        db.refresh(db_farmer)
+        return db_farmer
+
+    return each_farmer

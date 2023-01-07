@@ -1,12 +1,12 @@
-from database import Base
+from .database import Base
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 
-class farmer(Base):
+class Farmer(Base):
     
     __tablename__ = "farmerdb"
 
-    user_id = Column(Integer)
-    user_name = Column(String, primary_key=True, index=True, unique= True) # Considering each unique user with its phone number
+    # user_id = Column(Integer)
+    username = Column(String, primary_key=True, index=True, unique= True) # Considering each unique user by its phone number as username
     phone_number = Column(String, unique=True)
     password = Column(String)
     farmer_name = Column(String)

@@ -45,3 +45,21 @@ def create_farmer_csv(db: Session, farmer: schemas.FarmerDetail):
         return db_farmer
 
     return each_farmer
+
+def update_data(
+    db: Session,
+    new_farmer: schemas.FarmerUpdate,
+    curr_farmer: schemas.FarmerDetail,
+):
+    farmer_data = new_farmer.dict(exclude_unset=True)
+    for key, pair in farmer_data.items():
+        if pair != "string" and pair != "":
+            if key == "password":
+                setattr(curr_farmer, key, auth.get_password_hash(pair))
+            else:
+                setattr(curr_farmer, key, pair)
+
+    db.add(curr_farmer)
+    db.commit()
+    db.refresh(curr_farmer)
+    return curr_farmer

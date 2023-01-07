@@ -25,6 +25,11 @@ class FarmerDetail(FarmerBase):
                 "village_name": "Meham",
             }
         }
+    
+
+class FarmerPhone(FarmerDetail):
+    phone_number: str
+
 class FarmerCreate(FarmerDetail):
     password: str
     disabled: Union[bool, None] = None
@@ -36,28 +41,24 @@ class FarmerUpdate(BaseModel):
     village_name: Optional[str] = None
     password: Optional[str] = None
 
-class FarmerPhone(FarmerDetail):
-    phone_number: str
-
 class FarmerSignUp(FarmerDetail):
     password: str
     class Config:
-        orm_mode = True
         schema_extra = {
-        "example": {
-            "username": "9999999999",
-            "password": "password",
-            "farmer_name": "Rajesh",
-            "state_name": "Haryana",
-            "district_name": "Rohtak",
-            "village_name": "Meham",
-
+            "example": {
+                "username": "9999999999",
+                "password": "password",
+                "farmer_name": "Rajesh",
+                "state_name": "Haryana",
+                "district_name": "Rohtak",
+                "village_name": "Meham",
+            }
         }
-    }
+
 
 class Status(BaseModel):
     status: str
-    message_details: str
+    details: str
 
 class Token(BaseModel):
     access_token: str

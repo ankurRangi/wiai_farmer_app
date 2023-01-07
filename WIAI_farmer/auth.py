@@ -13,6 +13,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def authenticate_user(db: Session, username: str, password: str):
+    farmer = createObj.get_farmer(db, username)
+    if not farmer:
+        return False
+    if not verify_password(password, farmer.password):
+        return False
+    return farmer
+
+
 def get_password_hash(password):
     return pwd_context.hash(password)
 

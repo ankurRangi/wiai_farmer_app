@@ -31,5 +31,5 @@ async def upload_farmer_data_using_csv(
     file.file.close()
 
     # Status - Added successfully
-    data = {"status": "ok", "message_detail": "file uploaded successfully"} # add status for better visuals
+    data = {"status": "ok", "detail": "file uploaded successfully"} # add status for better visuals
     return data

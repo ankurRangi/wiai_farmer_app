@@ -1,5 +1,6 @@
 from . import schemas, models, auth
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 def create_farmer(db: Session, farmer: schemas.FarmerSignUp):
     db_farmer = models.Farmer(
@@ -19,25 +20,39 @@ def create_farmer(db: Session, farmer: schemas.FarmerSignUp):
     return db_farmer
 
 
-def get_farmer(db: Session, username: str):
+def get_farmer(username: str, db: Session):
     return db.query(models.Farmer).filter(models.Farmer.username == username).first()
 
 def get_farmers(db: Session, skip: int = 0, limit: int = 5):
     return db.query(models.Farmer).offset(skip).limit(limit).all()
 
-def create_farmer_csv(db: Session, farmer: schemas.FarmerDetail):
+def get_farmers_all(db: Session):
+    return db.query(models.Farmer).all()
+
+def delete_farmer(username: str, db: Session):
+    farmer = get_farmer(username, db)
+    if not farmer:
+        raise HTTPException(status_code=404, detail=f"User with {username} does not exists")
+    db.delete(farmer)
+    db.commit()
+
+def create_farmer_csv(db: Session, farmer: schemas.FarmerSignUp):
     db_farmer = models.Farmer(
         username=farmer.username,
         phone_number=farmer.username,
-        password=auth.get_password_hash(farmer.username),
+
+        # Using authorized user phonenumber/username as the password for all the famrers added through CSV
+        password=auth.get_password_hash("temp@123"),
         farmer_name=farmer.farmer_name,
         state_name=farmer.state_name,
         district_name=farmer.district_name,
         village_name=farmer.village_name,
+        is_active=True,
     )
 
-    each_farmer = get_farmer(db, db_farmer.username)
+    each_farmer = get_farmer(db_farmer.username, db)
 
+    # Checking if it exists or not
     if not each_farmer:
         db.add(db_farmer)
         db.commit()

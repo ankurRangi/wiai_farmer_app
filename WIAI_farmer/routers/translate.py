@@ -9,7 +9,7 @@ router = APIRouter(
 
 @router.get("/farmers/{language}", response_model=list[schemas.FarmerPhone])
 async def farmer_data_language(
-    language: str = "Hindi",
+    language: str = "hi",
     db: Session = Depends(database.get_db),
     farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
@@ -31,10 +31,10 @@ async def farmer_data_language(
     # returning the list with translated data
     return farmers
 
-@router.get("/translate", response_model=schemas.Status)
+@router.get("/translate", response_model=schemas.Message)
 async def translate_the_given_text(
-    language: str = "Hindi",
-    text: str = "test",
+    language: str = "hi",
+    text: str = "Sonpari AI AI AI",
     farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
 
@@ -45,6 +45,7 @@ async def translate_the_given_text(
     # returning ok status after successful translation
     data = {
         "status": "ok",
-        "detail": f"You translated text is {translated_text}",
+        "details": translated_text,
+        "language": language,
     }
     return data

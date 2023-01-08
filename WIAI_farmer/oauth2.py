@@ -4,6 +4,7 @@ from fastapi import HTTPException, Depends, status
 from sqlalchemy.orm import Session
 
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 async def get_current_user(access_token: str = Depends(oauth2_scheme), 
@@ -15,7 +16,7 @@ async def get_current_user(access_token: str = Depends(oauth2_scheme),
         headers={"WWW-Authenticate": "Bearer"},
     )
     token_data = auth.verify_token(access_token, credentials_exception)
-    farmer = createObj.get_farmer(db, username=token_data.username)
+    farmer = createObj.get_farmer(token_data.username, db)
     if farmer is None:
         raise credentials_exception
     return farmer
@@ -28,7 +29,7 @@ async def get_current_active_user(
     return farmer
 
 def authenticate_user(db: Session, username: str, password: str):
-    farmer = createObj.get_farmer(db, username)
+    farmer = createObj.get_farmer(username, db)
     if not farmer:
         return False
     if not auth.verify_password(password, farmer.password):

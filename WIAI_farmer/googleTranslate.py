@@ -5,20 +5,20 @@ from . import schemas
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"./translateKey.json"
 
-# async def translate_text(text, target):
+async def translate_text(text, target):
+    translate_client = translate_v2.Client()
+    output = translate_client.translate(text, target_language=target)
+    return output
+
+# async def translate_text(target, text):
 #     translate_client = translate_v2.Client()
-#     output = translate_client.translate(text, target_language=target)
-#     return output
+#     if isinstance(text, six.binary_type):
+#         text = text.decode("utf-8")
 
-async def translate_text(target, text):
-    translate_client = translate_v2.translate.Client()
-    if isinstance(text, six.binary_type):
-        text = text.decode("utf-8")
-
-    # Text can also be a sequence of strings, in which case this method
-    # will return a sequence of results for each text.
-    result = translate_client.translate(text, target_language=target)
-    return result
+#     # Text can also be a sequence of strings, in which case this method
+#     # will return a sequence of results for each text.
+#     result = translate_client.translate(text, target_language=target)
+#     return result
 
 
 async def join_farmer_data(farmer: schemas.FarmerDetail, lang: str):

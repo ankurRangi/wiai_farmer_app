@@ -11,12 +11,13 @@ router = APIRouter(
 )
 
 @router.get("/farmers", response_model=list[schemas.FarmerPhone])
-async def fetch_all_farmer_data(
+async def fetch_all_farmer(
     db: Session = Depends(database.get_db),
     farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
     farmers = createObj.get_farmers_all(db)
     return farmers
+
 
 @router.post("/signup", response_model=schemas.FarmerDetail)
 async def user_signup(
@@ -45,7 +46,7 @@ async def user_login(
 ):
 
     # Legit user or not (Exists in database or not)
-    farmer = createObj.get_farmer(db, form_data.username)
+    farmer = createObj.get_farmer(form_data.username, db)
 
     # Error if not
     if not farmer:
@@ -55,7 +56,7 @@ async def user_login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # iElse authenticate 
+    # Else authenticate 
     farmer = auth.authenticate_user(
         db, form_data.username, form_data.password
     )
@@ -64,7 +65,7 @@ async def user_login(
     if not farmer:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Wrong Password, If you are trying for first time, password is your phone-number.",
+            detail="Incorrect Password, Try 'temp@123' for first time user.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -87,3 +88,37 @@ async def user_login(
         "access_token_type": "bearer",
     }
     return access_token
+
+@router.patch("/update/{username}", response_model=schemas.FarmerDetail)
+async def update_farmer_data(
+    username: str,
+    new_farmer: schemas.FarmerUpdate,
+    farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
+    db: Session = Depends(database.get_db),
+):
+    # checking whether the user is changing data for themself only
+    if username != farmer.username:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Not authorised to change details for a diferent user - {username}, check your id - {farmer.username} and try again",
+        )
+
+    # update the data and return it
+    return createObj.update_details(db, new_farmer, farmer)
+
+@router.delete("/delete")
+async def user_login(
+    username: str,
+    db: Session = Depends(database.get_db),
+    farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
+):  
+    # checking whether the user is changing data for themself only
+    if username != farmer.username:
+        raise HTTPException(
+            status_code=401,
+            detail=f"Not authorised to delete details for a diferent user - {username}, check your id - {farmer.username} and try again",
+        )
+    createObj.delete_farmer(username, db)
+    return {"Status": "Yes", "Details": f"User with {username} is successfully deleted"}
+
+

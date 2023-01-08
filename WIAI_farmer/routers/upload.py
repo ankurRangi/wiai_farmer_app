@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from .. import schemas, database, models, createObj, auth
+from .. import schemas, database, models, createObj, auth, oauth2
 from sqlalchemy.orm import Session
+
 
 import csv, codecs
 
@@ -9,11 +10,11 @@ router = APIRouter(
 )
 
 # API to upload CSV to database
-@router.post("/upload", response_model=schemas.Status)
+@router.post("/upload")
 async def upload_farmer_data_using_csv(
     file: UploadFile = File(...),
     db: Session = Depends(database.get_db),
-    # farmer: schemas.FarmerDetail = Depends(auth.get_current_active_user),
+    farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
     csvReader = csv.DictReader(codecs.iterdecode(file.file, "utf-8"))
 

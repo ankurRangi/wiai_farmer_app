@@ -1,5 +1,9 @@
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from . import auth, createObj, database, schemas
+
+from ..authentication import auth
+
+from ..utility import createObj, database
+from .. import schemas
 from fastapi import HTTPException, Depends, status
 from sqlalchemy.orm import Session
 

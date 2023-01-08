@@ -1,4 +1,5 @@
-from . import schemas, models, auth
+from ..authentication import auth
+from .. import schemas, models
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
@@ -41,7 +42,7 @@ def create_farmer_csv(db: Session, farmer: schemas.FarmerSignUp):
         username=farmer.username,
         phone_number=farmer.username,
 
-        # Using authorized user phonenumber/username as the password for all the famrers added through CSV
+        # Using "temp@123" as the password for all the famrers added through CSV
         password=auth.get_password_hash("temp@123"),
         farmer_name=farmer.farmer_name,
         state_name=farmer.state_name,
@@ -61,7 +62,7 @@ def create_farmer_csv(db: Session, farmer: schemas.FarmerSignUp):
 
     return each_farmer
 
-def update_data(
+def update_details(
     db: Session,
     new_farmer: schemas.FarmerUpdate,
     curr_farmer: schemas.FarmerDetail,

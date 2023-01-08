@@ -1,7 +1,7 @@
 import os
 import six
 from google.cloud import translate_v2
-from . import schemas
+from .. import schemas
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"./translateKey.json"
 
@@ -23,16 +23,9 @@ async def translate_text(text, target):
 
 async def join_farmer_data(farmer: schemas.FarmerDetail, lang: str):
     # Creating the string format for conversion
-    joined_data = str(
-        farmer.farmer_name
-        + ","
-        + farmer.state_name
-        + ","
-        + farmer.district_name
-        + ","
-        + farmer.village_name
-    )
-    output = await translate_text(joined_data, lang)
-    output = output["translatedText"]
-    translated_data = output.split(",")
-    return translated_data
+    output = []
+    details_arr = [farmer.farmer_name, farmer.state_name, farmer.district_name, farmer.village_name]
+    for text_name in details_arr:
+        output.append((await translate_text(text_name.lower(), lang))["translatedText"])
+    # translated_data = output.split(",")
+    return output

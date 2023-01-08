@@ -2,3 +2,9 @@ wai-env
 .DS_Store
 .vscode
 farmerdb.db
+__pycache__
+authentication.__pycache__
+routers.__pycache__
+utilitu.__pycache__
+data.csv
+translateKey.json

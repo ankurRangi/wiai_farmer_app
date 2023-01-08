@@ -2,6 +2,15 @@ from ..authentication import auth
 from .. import schemas, models
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from enum import Enum
+
+class MyEnums(str, Enum):
+    English = "en"
+    Hindi = "hi"
+    Marathi = "mr"
+    Telugu = "te"
+    Punjabi = "pa"
+
 
 def create_farmer(db: Session, farmer: schemas.FarmerSignUp):
     db_farmer = models.Farmer(

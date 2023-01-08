@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from .routers import user, upload, translate
 from . import schemas, models
-from .database import engine
+from .utility.database import engine
 
 app = FastAPI()
 

@@ -1,5 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from .. import schemas, database, models, createObj, auth, oauth2
+
+from ..authentication import auth, oauth2
+
+from ..utility import createObj, database
+from .. import schemas, models
 from sqlalchemy.orm import Session
 
 

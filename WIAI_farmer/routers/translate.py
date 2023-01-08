@@ -1,5 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from .. import schemas, database, models, createObj, auth, oauth2, googleTranslate
+
+from ..authentication import auth, oauth2
+
+from ..utility import createObj, database, googleTranslate
+from .. import schemas, models
 from sqlalchemy.orm import Session
 
 
@@ -21,20 +25,21 @@ async def farmer_data_language(
     for i in farmers:
         # combining the rows to translate it altogether
         translated_data = await googleTranslate.join_farmer_data(i, language)
-
+        
+        print(translated_data)
         # changing the data to the translated data
-        i.farmer_name = translated_data[0]
-        i.state_name = translated_data[1]
-        i.district_name = translated_data[2]
-        i.village_name = translated_data[3]
+        i.farmer_name = translated_data[0].strip()
+        i.state_name = translated_data[1].strip()
+        i.district_name = translated_data[2].strip()
+        i.village_name = translated_data[3].strip()
 
     # returning the list with translated data
     return farmers
 
 @router.get("/translate", response_model=schemas.Message)
-async def translate_the_given_text(
+async def translate_a_string(
     language: str = "hi",
-    text: str = "Sonpari AI AI AI",
+    text: str = "Sonpari Ai Ai Ai",
     farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
 

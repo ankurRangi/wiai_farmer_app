@@ -1,4 +1,4 @@
-from .database import Base
+from .utility.database import Base
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 
 class Farmer(Base):

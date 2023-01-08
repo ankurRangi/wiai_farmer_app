@@ -7,7 +7,7 @@ class Farmer(Base):
 
     # user_id = Column(Integer)
     username = Column(String, primary_key=True, index=True, unique= True) # Considering each unique user by its phone number as username
-    phone_number = Column(String, unique=True)
+    phone_number = Column(String)
     password = Column(String)
     farmer_name = Column(String)
     state_name = Column(String)

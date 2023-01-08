@@ -35,11 +35,12 @@ class FarmerCreate(FarmerDetail):
     disabled: Union[bool, None] = None
 
 class FarmerUpdate(BaseModel):
+    password: Optional[str] = None
     farmer_name: Optional[str] = None
     state_name: Optional[str] = None
     district_name: Optional[str] = None
     village_name: Optional[str] = None
-    password: Optional[str] = None
+
 
 class FarmerSignUp(FarmerDetail):
     password: str
@@ -56,9 +57,12 @@ class FarmerSignUp(FarmerDetail):
         }
 
 
-class Status(BaseModel):
+class Message(BaseModel):
     status: str
     details: str
+    language: Optional[str]
+    class Config:
+        orm_mode = True
 
 class Token(BaseModel):
     access_token: str

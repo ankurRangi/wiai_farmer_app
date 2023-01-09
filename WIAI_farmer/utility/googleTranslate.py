@@ -22,10 +22,8 @@ async def translate_text(text, target):
 
 
 async def join_farmer_data(farmer: schemas.FarmerDetail, lang: str):
-    # Creating the string format for conversion
     output = []
     details_arr = [farmer.farmer_name, farmer.state_name, farmer.district_name, farmer.village_name]
     for text_name in details_arr:
         output.append((await translate_text(text_name.lower(), lang))["translatedText"])
-    # translated_data = output.split(",")
     return output

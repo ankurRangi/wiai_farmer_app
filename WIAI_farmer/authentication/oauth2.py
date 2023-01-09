@@ -1,4 +1,4 @@
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 
 from ..authentication import auth
 
@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="authenticate")
 
 async def get_current_user(access_token: str = Depends(oauth2_scheme), 
     db: Session = Depends(database.get_db),

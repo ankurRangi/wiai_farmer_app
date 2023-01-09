@@ -37,25 +37,3 @@ async def farmer_data_language(
         i.village_name = translated_data[3].strip()
 
     return farmers
-
-@router.get("/translate", response_model=schemas.Message)
-async def translate_a_string(
-    language: str = Query("hi", enum=["en", "hi", "mr", "te", "pu"]),
-    text: str = "Random funny English Joke",
-    farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
-):
-    """
-    Tesing - googleTranslate.translate_text()
-    
-    API to test the conversion of a particular sting to a specifed language i.e English (Default), Hindi, Marathi, Telegu, Punjabi
-
-    """
-    # Converting the text from the dropdown menu, enum=["en", "hi", "mr", "te", "pu"]
-    translated_text = await googleTranslate.translate_text(text, language)
-
-    data = {
-        "status": "ok",
-        "details": translated_text["translatedText"],
-        "language": language,
-    }
-    return data

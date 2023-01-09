@@ -65,9 +65,9 @@ uvicorn WIAI_Farmer.main:app --reload
 ```
 
 ## Now head over to your browser to play with the APIs,
-***```
+```
 http://127.0.0.1:8000/docs
-```***
+```
 
 ## To test the project, Add the following files in the top directory,
 ```

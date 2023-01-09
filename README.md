@@ -4,6 +4,7 @@ Problem Statement: ***We are provided a list of farmer names and other relevant 
 
 **Basic Details about the project:**
 Framework and Database: FastAPI and SQLite (Default)
+
 External APIs Used: Google Translate APIs [https://cloud.google.com/translate/docs/basic/translate-text-basic](Link)
 
 Note: To get a idea about the project please go through the API Documentation.pdf file for better understanding.

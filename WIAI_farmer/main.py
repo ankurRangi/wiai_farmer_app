@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import user, upload, translate
+from WIAI_farmer.routers import user, upload, translate
 from . import schemas, models
 from .utility.database import engine
 
@@ -16,6 +16,4 @@ async def server_setup():
 app.include_router(user.router)
 app.include_router(upload.router)
 app.include_router(translate.router)
-
-
 

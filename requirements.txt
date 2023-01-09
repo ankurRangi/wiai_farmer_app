@@ -5,6 +5,8 @@ sqlalchemy
 python-multipart
 passlib
 bcrypt
+pytest
+httpx
 python-jose
 google-api-python-client
 google-cloud-translate

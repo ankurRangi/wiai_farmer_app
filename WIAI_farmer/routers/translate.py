@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query
-from ..authentication import auth, oauth2
+from fastapi import APIRouter, Depends, Query
+from ..authentication import oauth2
 from ..utility import createObj, database, googleTranslate
-from .. import schemas, models
+from .. import schemas
 from sqlalchemy.orm import Session
 
 
@@ -16,40 +16,46 @@ async def farmer_data_language(
     db: Session = Depends(database.get_db),
     farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
-    print(language.value.key)
+    """
+    API to retrive the data from the db in a specifc language i.e English (Default), Hindi, Marathi, Telegu, Punjabi
+    """
+    # print(language.value.key)
     language = language.value
-    # fetching all the data here
+
+    # Retriving all the data here
     farmers = createObj.get_farmers_all(db)
 
-    # going through every row of data fetched
+    # Looping over each row
     for i in farmers:
-        # combining the rows to translate it altogether
+        # Tranlating each entry for the particular row
         translated_data = await googleTranslate.join_farmer_data(i, language)
         
-        # changing the data to the translated data
+        # Converting the entries to send the data back in that language
         i.farmer_name = translated_data[0].strip()
         i.state_name = translated_data[1].strip()
         i.district_name = translated_data[2].strip()
         i.village_name = translated_data[3].strip()
 
-    # returning the list with translated data
     return farmers
 
 @router.get("/translate", response_model=schemas.Message)
 async def translate_a_string(
     language: str = Query("hi", enum=["en", "hi", "mr", "te", "pu"]),
-    text: str = "Sonpari Ai Ai Ai",
+    text: str = "Random funny English Joke",
     farmer: schemas.FarmerDetail = Depends(oauth2.get_current_active_user),
 ):
+    """
+    Tesing - googleTranslate.translate_text()
+    
+    API to test the conversion of a particular sting to a specifed language i.e English (Default), Hindi, Marathi, Telegu, Punjabi
 
-    # calling the helper function to translate the text
+    """
+    # Converting the text from the dropdown menu, enum=["en", "hi", "mr", "te", "pu"]
     translated_text = await googleTranslate.translate_text(text, language)
-    translated_text = translated_text["translatedText"]
 
-    # returning ok status after successful translation
     data = {
         "status": "ok",
-        "details": translated_text,
+        "details": translated_text["translatedText"],
         "language": language,
     }
     return data

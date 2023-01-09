@@ -7,6 +7,8 @@ Framework and Database: **FastAPI and SQLite (Default)**
 
 External APIs Used: **Google Translate APIs** [Link](https://cloud.google.com/translate/docs/basic/translate-text-basic)
 
+## Assumption:
+**Keeping the default password as "temp@123" for users in csv and the phone number is used as the username for the model**
 
 Note: To get a idea about the project please go through the API Documentation.pdf file for better understanding.
 

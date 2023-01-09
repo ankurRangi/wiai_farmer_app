@@ -30,3 +30,10 @@ def test_fetch_farmers_in_punjabi_LOGIN(client, token_headers):
     assert response.json()[0]["village_name"] == "डोरी"
     assert response.json()[0]["phone_number"] == "string"
 
+
+def test_fetch_farmers_in_incorrect_LOG(client, token_headers):
+    """
+        Testing to fetch all the details of users with INCORRECT (bengali - bn) language input after the login/authentication
+    """
+    response = client.get("/farmers/bn", headers=token_headers)
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

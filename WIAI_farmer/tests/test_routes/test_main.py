@@ -3,7 +3,7 @@ from WIAI_farmer.main import app
 from WIAI_farmer.authentication import auth
 
 
-def test_server_setup(client):
+def test_health_check(client):
     """
         Testing if the server is working or not
     """

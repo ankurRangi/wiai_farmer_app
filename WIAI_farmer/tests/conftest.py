@@ -58,6 +58,6 @@ def token_headers(client: TestClient):
     if not farmer:
         createObj.create_farmer(db, new_farmer)
     data = {"username": new_farmer.username,"password": new_farmer.password,}
-    response = client.post("/login", data=data)
+    response = client.post("/authenticate", data=data)
     token = response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}

@@ -8,3 +8,10 @@ routers.__pycache__
 utilitu.__pycache__
 data.csv
 translateKey.json
+keys.py
+tests.__pycache__
+tests.test_routes.__pycache__
+tests.__init__.py
+test_db.db
+test_upload.csv
+WIAI..pytytest_cache
